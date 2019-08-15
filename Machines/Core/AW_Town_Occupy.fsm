@@ -1,0 +1,183 @@
+/*%FSM<COMPILE "F:\SteamLibrary\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, AW_Town_Occupy">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"INIT_",0,250,11.694550,-60.165009,101.694550,-10.165009,0.000000,"INIT" \n ""};
+item1[] = {"_",8,218,120.777710,-59.447327,210.777710,-9.447327,0.000000,""};
+item2[] = {"Town_cleared___",2,250,486.062683,148.255676,576.062683,198.255676,0.000000,"Town cleared ?= "};
+item3[] = {"_",8,218,366.937958,-55.142151,456.938019,-5.142143,0.000000,""};
+item4[] = {"Find_a_town_and",2,4346,247.084534,-55.141418,337.084595,-5.141434,0.000000,"Find a town and " \n "occupy"};
+item5[] = {"check_if_cleared",4,218,485.345154,37.313766,575.345154,87.313766,0.000000,"check if cleared ? "};
+item6[] = {"set_timeout",2,250,485.350616,-55.142151,575.350647,-5.142151,0.000000,"set timeout"};
+item7[] = {"yes",4,218,374.825012,147.372162,464.825012,197.372162,1.000000,"yes"};
+item8[] = {"no",8,218,597.333069,36.150421,687.333069,86.150421,0.000000,"no"};
+item9[] = {"comp_task__plus",2,250,247.233582,148.125671,337.233582,198.125671,0.000000,"comp task" \n " plus wait"};
+item10[] = {"wait",4,218,246.616394,31.995209,336.616394,81.995209,0.000000,"wait"};
+link0[] = {0,1};
+link1[] = {1,4};
+link2[] = {2,7};
+link3[] = {2,8};
+link4[] = {3,6};
+link5[] = {4,3};
+link6[] = {5,2};
+link7[] = {6,5};
+link8[] = {7,9};
+link9[] = {8,6};
+link10[] = {9,10};
+link11[] = {10,4};
+globals[] = {0.000000,0,0,0,0,640,480,2,15,6316128,1,66.849312,697.558044,353.166718,-276.379486,1085,1083,1};
+window[] = {0,-1,-1,-1,-1,1307,-2508,-342,52,1,1103};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "AW_Town_Occupy";
+        class States
+        {
+                /*%FSM<STATE "INIT_">*/
+                class INIT_
+                {
+                        name = "INIT_";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="Find_a_town_and";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Town_cleared___">*/
+                class Town_cleared___
+                {
+                        name = "Town_cleared___";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "yes">*/
+                                class yes
+                                {
+                                        itemno = 7;
+                                        priority = 1.000000;
+                                        to="comp_task__plus";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"count list _trg < 1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "no">*/
+                                class no
+                                {
+                                        itemno = 8;
+                                        priority = 0.000000;
+                                        to="set_timeout";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Find_a_town_and">*/
+                class Find_a_town_and
+                {
+                        name = "Find_a_town_and";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"_town = call AW_fnc_map_findTown;" \n
+                         "" \n
+                         "" \n
+                         "_spawnedUnits = [EAST, 6, _town, 600] call AW_fnc_ai_spawnEnemy;" \n
+                         "[_spawnedUnits, [[""patrol"", true, 250]]] call AW_fnc_ai_setBehaviour;" \n
+                         "" \n
+                         "_trg = createTrigger [""EmptyDetector"",_town];" \n
+                         "_trg setTriggerArea [600,600,0,false];" \n
+                         "_trg setTriggerActivation [""EAST"",""PRESENT"", false];" \n
+                         "_trg setTriggerStatements [""this"","""",""""];" \n
+                         "" \n
+                         "" \n
+                         "" \n
+                         "//TODO Marker"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="set_timeout";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "set_timeout">*/
+                class set_timeout
+                {
+                        name = "set_timeout";
+                        itemno = 6;
+                        init = /*%FSM<STATEINIT""">*/"_timeout = (time + 30 + (random 50));"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "check_if_cleared">*/
+                                class check_if_cleared
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="Town_cleared___";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"time >= _timeout"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "comp_task__plus">*/
+                class comp_task__plus
+                {
+                        name = "comp_task__plus";
+                        itemno = 9;
+                        init = /*%FSM<STATEINIT""">*/"//Task comp" \n
+                         "" \n
+                         "" \n
+                         "_timeout = (time + 300 + (random 10));"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "wait">*/
+                                class wait
+                                {
+                                        itemno = 10;
+                                        priority = 0.000000;
+                                        to="Find_a_town_and";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"time >= _timeout"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="INIT_";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/

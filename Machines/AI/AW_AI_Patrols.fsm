@@ -1,0 +1,152 @@
+/*%FSM<COMPILE "F:\SteamLibrary\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, AI_Patrols">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"_",0,250,-129.355164,-40.178802,-39.355164,9.821198,0.000000,""};
+item1[] = {"go",8,218,18.153366,-41.082275,108.153374,8.917725,0.000000,"go"};
+item2[] = {"create_timeout",2,4346,148.766174,-41.082306,238.766205,8.917694,0.000000,"create timeout"};
+item3[] = {"time_for_check",4,218,283.684784,-41.082245,373.684784,8.917755,0.000000,"time for check"};
+item4[] = {"amount_of__patrols",2,250,282.967102,45.036041,372.967133,95.036041,0.000000,"amount of " \n "patrols ok ? "};
+item5[] = {"yes",4,218,148.766098,45.329956,238.766098,95.329956,0.000000,"yes"};
+item6[] = {"no",4,218,441.568329,44.612274,531.568298,94.612274,1.000000,"no"};
+item7[] = {"spawn_2_patrols",2,250,441.568359,144.365997,531.568359,194.365997,0.000000,"spawn 2 patrols " \n "per camp"};
+item8[] = {"enter_check_loop",8,218,40.400696,142.930725,130.400757,192.930725,0.000000,"enter check loop" \n ""};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,3};
+link3[] = {3,4};
+link4[] = {4,5};
+link5[] = {4,6};
+link6[] = {5,2};
+link7[] = {6,7};
+link8[] = {7,8};
+link9[] = {8,2};
+globals[] = {0.000000,0,0,0,0,640,480,2,12,6316128,1,-196.636749,582.016113,507.380280,-269.837311,1085,1083,1};
+window[] = {0,-1,-1,-1,-1,1411,156,2322,156,1,1103};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "AI_Patrols";
+        class States
+        {
+                /*%FSM<STATE "_">*/
+                class _
+                {
+                        name = "_";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"AW_Patrols = [];" \n
+                         "_patrol_amount = 10;//TEMP" \n
+                         "hint ""AW_AI_Patrols Started"";"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "go">*/
+                                class go
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="create_timeout";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "create_timeout">*/
+                class create_timeout
+                {
+                        name = "create_timeout";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"" \n
+                         "_timeout = (time + 30 + (random 30));" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "time_for_check">*/
+                                class time_for_check
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="amount_of__patrols";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"time >= _timeout"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "amount_of__patrols">*/
+                class amount_of__patrols
+                {
+                        name = "amount_of__patrols";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"//Above 7" \n
+                         "" \n
+                         "_current_patrols = count AW_Patrols;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "no">*/
+                                class no
+                                {
+                                        itemno = 6;
+                                        priority = 1.000000;
+                                        to="spawn_2_patrols";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_current_patrols < 4"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"hint ""AW_Patrols: Current patrol count NOT OK!,Spawning groups"";"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "yes">*/
+                                class yes
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="create_timeout";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_current_patrols > _patrol_amount"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"hint ""AW_Patrols: Current patrol count OK!"";"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "spawn_2_patrols">*/
+                class spawn_2_patrols
+                {
+                        name = "spawn_2_patrols";
+                        itemno = 7;
+                        init = /*%FSM<STATEINIT""">*/"{" \n
+                         "" \n
+                         "_spawnedGroups = [2,_x] call AW_fnc_patrols_spawnPatrol;" \n
+                         "" \n
+                         "" \n
+                         "} forEach AW_AI_CAMPS;" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "enter_check_loop">*/
+                                class enter_check_loop
+                                {
+                                        itemno = 8;
+                                        priority = 0.000000;
+                                        to="create_timeout";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"hint ""entering loop"""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="_";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/
